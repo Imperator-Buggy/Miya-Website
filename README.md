@@ -69,10 +69,11 @@ Dockerfile, render.yaml, docker/apache.conf   deploy from GitHub
 GitHub Pages only serves static files, so it cannot run PHP or hold orders.
 Recommended free setup that still deploys on every push:
 
-1. **Database — Supabase** (free Postgres, region *Mumbai* is nearest to the UAE).
-   Create a project, copy the *session-mode* connection string into
-   `DB_DSN`, `DB_USER`, `DB_PASS` (see `.env.example`), then run
-   `php tools/migrate.php` once locally against it.
+1. **Database — Supabase** (free Postgres). The project is already created
+   (session pooler in Seoul; host and user are in `.env.example` and
+   `render.yaml`). Only the database password is secret: put it in `.env`
+   locally and in Render's dashboard. Run `php tools/migrate.php` once to
+   create the tables.
 2. **Hosting — Render** (free web service, region *Singapore*). New → Blueprint →
    pick this repo; `render.yaml` sets everything up. Add the env vars in the
    dashboard. Every push to `main` redeploys. Free instances sleep after 15
