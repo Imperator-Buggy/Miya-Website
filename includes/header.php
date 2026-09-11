@@ -4,6 +4,8 @@ $pageTitle = $pageTitle ?? SITE_NAME;
 $noIntro   = $noIntro ?? false;   // confirmation/admin pages skip the intro overlay
 $noNav     = $noNav ?? false;     // admin hides the shop tabs
 $base      = $base ?? '';         // '../' for pages in a sub-folder (admin)
+$fullBleed = $fullBleed ?? false; // game page: edge-to-edge main
+$currentPage = basename($_SERVER['SCRIPT_NAME'] ?? 'index.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,8 +69,8 @@ $base      = $base ?? '';         // '../' for pages in a sub-folder (admin)
 
     <?php if (!$noNav): ?>
     <nav class="tabs tabs--top" role="tablist" aria-label="Sections">
-      <?php foreach (TABS as $id => [$label, $icon]): ?>
-        <a class="tab" role="tab" href="<?= $base ?>index.php#<?= e($id) ?>" data-tab="<?= e($id) ?>" aria-controls="panel-<?= e($id) ?>">
+      <?php foreach (TABS as $id => $tab): [$label, $icon] = $tab; $page = $tab[2] ?? null; ?>
+        <a class="tab<?= $page && $currentPage === $page ? ' is-active' : '' ?>" role="tab" href="<?= $base . ($page ?: 'index.php#' . e($id)) ?>"<?= $page ? '' : ' data-tab="' . e($id) . '" aria-controls="panel-' . e($id) . '"' ?>>
           <img class="pixel" src="<?= $base . e($icon) ?>" alt="" width="24" height="24"><?= e($label) ?><?= $id === 'order' ? ' <span class="badge" data-cart-count hidden>0</span>' : '' ?>
         </a>
       <?php endforeach; ?>
@@ -83,4 +85,4 @@ $base      = $base ?? '';         // '../' for pages in a sub-folder (admin)
   </div>
 </header>
 
-<main id="main">
+<main id="main"<?= $fullBleed ? ' class="main--full"' : '' ?>>

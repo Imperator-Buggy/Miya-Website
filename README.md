@@ -19,6 +19,18 @@ php -S localhost:8000
 
 PHP 8.2+ with `pdo_sqlite` (local) and `pdo_pgsql` (production). No Composer.
 
+## Pages
+
+- **Home / Menu / Order** — the shop (index.php tab panels).
+- **Play** (`game.php`) — *Miya's Cookie Farm*, a pixel farming → baking → delivery
+  game built on the sprite pack. Grow wheat, milk cows, shake date palms, pick
+  hazelnuts, scrape sea salt, bake in the oven timing mini-game, deliver before the
+  order goes cold. Night orders pay double, hearts unlock the pack's outfits, coins
+  buy upgrades. Cast: Miya, Mama Noura, Hessa (farm), Noor (cows), Lulu (orchard),
+  Reem (night). Saves to localStorage. Touch + keyboard.
+- **3D** (`cookie3d.php`) — the signature cookie exploded in Three.js: drag to orbit,
+  slider to lift the layers, tap a layer for a note, take a bite, pixel mode.
+
 ## Structure
 
 ```

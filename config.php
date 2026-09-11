@@ -17,7 +17,7 @@ const THEME_COLOR  = '#D8B389';     // kraft — used by the PWA UI chrome
 define('SITE_URL', rtrim(env('APP_URL', ''), '/'));
 
 /** Cache-busting version for CSS/JS/service worker. Bump on each deploy. */
-const ASSET_VERSION = '0.2.0';
+const ASSET_VERSION = '0.3.0';
 
 /* ---------------------------------------------------------------------------
    Locale — Abu Dhabi, UAE
@@ -75,12 +75,13 @@ const PAYMENT_METHODS = [
     'card'  => 'Card via Stripe (Apple Pay / Google Pay)',
 ];
 
-/** Tabs: id => [label, icon sprite] */
+/** Tabs: id => [label, icon sprite, optional page]. Without a page the tab is a panel on index.php. */
 const TABS = [
-    'home'  => ['Home',  'assets/img/props/cookie_signature@4x.png'],
-    'menu'  => ['Menu',  'assets/img/props/cookie_tray@4x.png'],
-    'about' => ['About', 'assets/img/props/heart@4x.png'],
-    'order' => ['Order', 'assets/img/props/milk_glass@4x.png'],
+    'home'   => ['Home',  'assets/img/props/cookie_signature@4x.png'],
+    'menu'   => ['Menu',  'assets/img/props/cookie_tray@4x.png'],
+    'play'   => ['Play',  'assets/img/props/star@4x.png',        'game.php'],
+    'cookie' => ['3D',    'assets/img/props/cookie_split@4x.png', 'cookie3d.php'],
+    'order'  => ['Order', 'assets/img/props/milk_glass@4x.png'],
 ];
 
 date_default_timezone_set(TIMEZONE);

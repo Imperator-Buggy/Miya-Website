@@ -16,6 +16,7 @@ require __DIR__ . '/includes/header.php';
       <div class="hero__cta">
         <a class="btn" href="#order">Order cookies &rarr;</a>
         <a class="btn btn--ghost" href="#menu">See the menu</a>
+        <a class="btn btn--kraft" href="game.php">&#9654; Play Cookie Farm</a>
       </div>
     </div>
     <div class="hero__art">

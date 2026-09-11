@@ -4,7 +4,7 @@
    Pages are network-first with a cached fallback so the site opens offline.
    Bump CACHE when assets change (matches ASSET_VERSION in config.php).
    ========================================================================== */
-const CACHE = 'miya-v0.2.0';
+const CACHE = 'miya-v0.3.0';
 const SHELL = [
   './',
   './index.php',
@@ -14,6 +14,12 @@ const SHELL = [
   './assets/js/intro.js',
   './assets/js/app.js',
   './assets/js/shop.js',
+  './assets/js/game.js',
+  './assets/js/cookie3d.js',
+  './game.php',
+  './cookie3d.php',
+  './assets/img/sprites/miya_sheet.png',
+  './assets/img/sprites/props_sheet.png',
   './assets/img/hero.png',
   './assets/img/sprites/miya_nutella_idle.png',
   './assets/img/sprites/miya_nutella_run.png',
