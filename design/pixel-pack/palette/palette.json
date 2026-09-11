@@ -1,0 +1,262 @@
+{
+  "K": {
+    "hex": "#2B211C",
+    "rgba": [
+      43,
+      33,
+      28,
+      255
+    ],
+    "role": "Ink outline (logo black)"
+  },
+  "k": {
+    "hex": "#4A3A30",
+    "rgba": [
+      74,
+      58,
+      48,
+      255
+    ],
+    "role": "Soft ink / motion ticks"
+  },
+  "S": {
+    "hex": "#F5CDA8",
+    "rgba": [
+      245,
+      205,
+      168,
+      255
+    ],
+    "role": "Skin"
+  },
+  "s": {
+    "hex": "#D6A67C",
+    "rgba": [
+      214,
+      166,
+      124,
+      255
+    ],
+    "role": "Skin shadow"
+  },
+  "H": {
+    "hex": "#1A1414",
+    "rgba": [
+      26,
+      20,
+      20,
+      255
+    ],
+    "role": "Hair"
+  },
+  "h": {
+    "hex": "#3A2C26",
+    "rgba": [
+      58,
+      44,
+      38,
+      255
+    ],
+    "role": "Hair highlight"
+  },
+  "P": {
+    "hex": "#E99E9C",
+    "rgba": [
+      233,
+      158,
+      156,
+      255
+    ],
+    "role": "Blush"
+  },
+  "W": {
+    "hex": "#FFF9F0",
+    "rgba": [
+      255,
+      249,
+      240,
+      255
+    ],
+    "role": "White"
+  },
+  "w": {
+    "hex": "#DFD2C1",
+    "rgba": [
+      223,
+      210,
+      193,
+      255
+    ],
+    "role": "White shadow"
+  },
+  "T": {
+    "hex": "#D8AE7E",
+    "rgba": [
+      216,
+      174,
+      126,
+      255
+    ],
+    "role": "Kraft paper"
+  },
+  "t": {
+    "hex": "#B58758",
+    "rgba": [
+      181,
+      135,
+      88,
+      255
+    ],
+    "role": "Kraft shadow"
+  },
+  "C": {
+    "hex": "#C68946",
+    "rgba": [
+      198,
+      137,
+      70,
+      255
+    ],
+    "role": "Cookie mid"
+  },
+  "c": {
+    "hex": "#E2AC68",
+    "rgba": [
+      226,
+      172,
+      104,
+      255
+    ],
+    "role": "Cookie light"
+  },
+  "d": {
+    "hex": "#966030",
+    "rgba": [
+      150,
+      96,
+      48,
+      255
+    ],
+    "role": "Cookie crust"
+  },
+  "N": {
+    "hex": "#3A2014",
+    "rgba": [
+      58,
+      32,
+      20,
+      255
+    ],
+    "role": "Nutella"
+  },
+  "n": {
+    "hex": "#633821",
+    "rgba": [
+      99,
+      56,
+      33,
+      255
+    ],
+    "role": "Nutella light"
+  },
+  "X": {
+    "hex": "#FFFFFF",
+    "rgba": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "role": "Sea salt"
+  },
+  "G": {
+    "hex": "#F3C94C",
+    "rgba": [
+      243,
+      201,
+      76,
+      255
+    ],
+    "role": "Gold / reward"
+  },
+  "g": {
+    "hex": "#C69A28",
+    "rgba": [
+      198,
+      154,
+      40,
+      255
+    ],
+    "role": "Gold shadow"
+  },
+  "R": {
+    "hex": "#D6544F",
+    "rgba": [
+      214,
+      84,
+      79,
+      255
+    ],
+    "role": "Red accent"
+  },
+  "p": {
+    "hex": "#F0B0BE",
+    "rgba": [
+      240,
+      176,
+      190,
+      255
+    ],
+    "role": "Pink"
+  },
+  "B": {
+    "hex": "#688ABE",
+    "rgba": [
+      104,
+      138,
+      190,
+      255
+    ],
+    "role": "Blue"
+  },
+  "M": {
+    "hex": "#8CC6AA",
+    "rgba": [
+      140,
+      198,
+      170,
+      255
+    ],
+    "role": "Mint"
+  },
+  "L": {
+    "hex": "#A896C9",
+    "rgba": [
+      168,
+      150,
+      201,
+      255
+    ],
+    "role": "Lavender"
+  },
+  "e": {
+    "hex": "#785C4A",
+    "rgba": [
+      120,
+      92,
+      74,
+      255
+    ],
+    "role": "Warm brown"
+  },
+  "_background_kraft": {
+    "hex": "#D8B389",
+    "rgba": [
+      216,
+      179,
+      137,
+      255
+    ],
+    "role": "Brand kraft paper background (not part of sprites)"
+  }
+}
