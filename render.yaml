@@ -10,12 +10,8 @@ services:
     envVars:
       - key: APP_URL
         sync: false            # e.g. https://miyas-cookies.onrender.com
-      - key: DB_DSN
-        sync: false            # Supabase Postgres DSN (see .env.example)
-      - key: DB_USER
-        sync: false
-      - key: DB_PASS
-        sync: false
+      - key: DATABASE_URL
+        sync: false            # Supabase session-pooler URI with password (see .env.example)
       - key: ZIINA_API_KEY
         sync: false
       - key: ZIINA_TEST

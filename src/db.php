@@ -1,7 +1,9 @@
 <?php
 /**
- * Database access. One PDO connection, chosen by DB_DSN in .env:
+ * Database access. One PDO connection, chosen by .env:
  *
+ *   DATABASE_URL=postgresql://user:pass@host:5432/postgres   paste straight from Supabase (session pooler)
+ *   or DB_DSN + DB_USER + DB_PASS:
  *   (default)  sqlite:data/miya.sqlite            zero-setup local development
  *   pgsql:host=...;port=5432;dbname=postgres;sslmode=require   Supabase / Neon
  *   mysql:host=...;dbname=miya                    any MySQL / MariaDB host
@@ -17,14 +19,26 @@ function db(): PDO
     if ($pdo !== null) {
         return $pdo;
     }
-    $dsn = env('DB_DSN', 'sqlite:' . dirname(__DIR__) . '/data/miya.sqlite');
+    $dsn  = env('DB_DSN', 'sqlite:' . dirname(__DIR__) . '/data/miya.sqlite');
+    $user = env('DB_USER');
+    $pass = env('DB_PASS');
+    // DATABASE_URL=postgresql://user:pass@host:port/db (what Supabase / Render hand you) wins if set.
+    if ($url = env('DATABASE_URL')) {
+        $u = parse_url($url);
+        if ($u === false || empty($u['host'])) throw new RuntimeException('DATABASE_URL is not a valid URL');
+        $scheme = in_array($u['scheme'] ?? '', ['postgres', 'postgresql'], true) ? 'pgsql' : ($u['scheme'] ?? 'pgsql');
+        $dsn  = sprintf('%s:host=%s;port=%d;dbname=%s', $scheme, $u['host'], $u['port'] ?? 5432, ltrim($u['path'] ?? '/postgres', '/'));
+        if ($scheme === 'pgsql') $dsn .= ';sslmode=require';
+        $user = isset($u['user']) ? rawurldecode($u['user']) : $user;
+        $pass = isset($u['pass']) ? rawurldecode($u['pass']) : $pass;
+    }
     if (str_starts_with($dsn, 'sqlite:')) {
         $path = substr($dsn, 7);
         if ($path !== ':memory:' && !is_dir(dirname($path))) {
             mkdir(dirname($path), 0775, true);
         }
     }
-    $pdo = new PDO($dsn, env('DB_USER'), env('DB_PASS'), [
+    $pdo = new PDO($dsn, $user, $pass, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
