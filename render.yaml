@@ -9,7 +9,7 @@ services:
     healthCheckPath: /index.php
     envVars:
       - key: APP_URL
-        sync: false            # e.g. https://miyas-cookies.onrender.com
+        value: https://miyas-cookies.onrender.com
       - key: DATABASE_URL
         sync: false            # paste the Supabase session-pooler URI (with password) in the Render dashboard
       - key: ZIINA_API_KEY
