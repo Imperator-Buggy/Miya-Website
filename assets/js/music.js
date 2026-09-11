@@ -7,7 +7,7 @@
    and works offline. Browsers require a user gesture before audio can play,
    which is why the intro shows a "tap to begin" card first.
 
-   Public API (window.MiyaMusic): start(), fadeOut(sec), toggle(), muted
+   Public API (window.MiyaMusic): start(), fadeOut(sec), duck(level), toggle(), muted
    ========================================================================== */
 (function () {
   'use strict';
@@ -49,6 +49,7 @@
   let ctx = null, master = null, started = false, timer = null;
   let nextNoteTime = 0, melodyIdx = 0, barIdx = 0, beatInBar = 0;
   let muted = false;
+  let level = 1;          // 1 during the intro, softer once you are browsing
   try { muted = localStorage.getItem(MUTE_KEY) === '1'; } catch (e) {}
 
   function ensureContext() {
@@ -142,7 +143,7 @@
 
   function applyMute() {
     if (!master) return;
-    const target = muted ? 0.0001 : 1;
+    const target = muted ? 0.0001 : level;
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setTargetAtTime(target, ctx.currentTime, 0.15);
     document.querySelectorAll('[data-music-toggle]').forEach((b) => {
@@ -163,7 +164,7 @@
     }
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setValueAtTime(0.0001, ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(muted ? 0.0001 : 1, ctx.currentTime + 2.5);
+    master.gain.exponentialRampToValueAtTime(muted ? 0.0001 : level, ctx.currentTime + 2.5);
     applyMute();
   }
 
@@ -175,13 +176,22 @@
     setTimeout(() => { if (timer) { clearInterval(timer); timer = null; started = false; } }, (sec || 1.5) * 1000 + 100);
   }
 
+  /** Lower the volume (0..1) without stopping — used when the intro hands off to the site. */
+  function duck(to) {
+    level = Math.max(0.05, Math.min(1, to));
+    if (ctx && started && !muted) {
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(level, ctx.currentTime, 0.8);
+    }
+  }
+
   function toggle() {
     muted = !muted;
     try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (e) {}
     if (!started && !muted) start(); else applyMute();
   }
 
-  window.MiyaMusic = { start, fadeOut, toggle, get muted() { return muted; } };
+  window.MiyaMusic = { start, fadeOut, duck, toggle, get muted() { return muted; } };
   document.querySelectorAll('[data-music-toggle]').forEach((b) => {
     b.setAttribute('aria-pressed', String(!muted));
     b.classList.toggle('is-muted', muted);

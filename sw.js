@@ -4,7 +4,7 @@
    Pages are network-first with a cached fallback so the site opens offline.
    Bump CACHE when assets change (matches ASSET_VERSION in config.php).
    ========================================================================== */
-const CACHE = 'miya-v0.1.0';
+const CACHE = 'miya-v0.2.0';
 const SHELL = [
   './',
   './index.php',
@@ -13,6 +13,7 @@ const SHELL = [
   './assets/js/music.js',
   './assets/js/intro.js',
   './assets/js/app.js',
+  './assets/js/shop.js',
   './assets/img/hero.png',
   './assets/img/sprites/miya_nutella_idle.png',
   './assets/img/sprites/miya_nutella_run.png',
@@ -49,7 +50,8 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== location.origin) return; // fonts etc. go straight to network
+  if (url.origin !== location.origin) return; // fonts, map tiles, Leaflet go straight to network
+  if (url.pathname.includes('/api/') || url.pathname.includes('/admin/') || url.pathname.endsWith('order.php')) return; // always live
 
   if (req.mode === 'navigate' || url.pathname.endsWith('.php')) {
     // pages: network first, fall back to cache

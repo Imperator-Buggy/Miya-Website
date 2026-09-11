@@ -1,0 +1,28 @@
+# Render blueprint — "New → Blueprint" in the Render dashboard, pick this repo,
+# and it deploys on every push to main. Fill the secret values in the dashboard.
+services:
+  - type: web
+    name: miyas-cookies
+    runtime: docker
+    plan: free
+    region: singapore          # closest Render region to the UAE
+    healthCheckPath: /index.php
+    envVars:
+      - key: APP_URL
+        sync: false            # e.g. https://miyas-cookies.onrender.com
+      - key: DB_DSN
+        sync: false            # Supabase Postgres DSN (see .env.example)
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: ZIINA_API_KEY
+        sync: false
+      - key: ZIINA_TEST
+        value: "false"
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

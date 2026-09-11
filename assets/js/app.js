@@ -10,6 +10,7 @@
   const names = panels.map((p) => p.dataset.panel);
 
   function show(name, focus) {
+    if (!names.length) return;
     if (!names.includes(name)) name = names[0];
     panels.forEach((p) => {
       const on = p.dataset.panel === name;
@@ -23,6 +24,7 @@
       t.tabIndex = on ? 0 : -1;
     });
     document.body.dataset.tab = name;
+    document.dispatchEvent(new CustomEvent('miya:tab', { detail: name }));
     if (focus) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -39,7 +41,7 @@
     }
   });
   window.addEventListener('hashchange', () => show(location.hash.slice(1), false));
-  show(location.hash.slice(1) || names[0], false);
+  if (names.length) show(location.hash.slice(1) || names[0], false);
 
   /* --- Replay intro ------------------------------------------------------ */
   document.querySelectorAll('[data-replay-intro]').forEach((b) => {

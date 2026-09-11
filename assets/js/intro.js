@@ -482,7 +482,7 @@
     state = 'done';
     cancelAnimationFrame(raf);
     try { localStorage.setItem(SEEN_KEY, '1'); } catch (e) {}
-    if (window.MiyaMusic) window.MiyaMusic.fadeOut(1.6);
+    if (window.MiyaMusic) window.MiyaMusic.duck(0.55); // keep the music going, a touch softer
     root.classList.add('is-leaving');
     document.body.classList.remove('intro-open');
     setTimeout(() => {
