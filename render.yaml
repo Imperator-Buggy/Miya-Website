@@ -10,12 +10,8 @@ services:
     envVars:
       - key: APP_URL
         sync: false            # e.g. https://miyas-cookies.onrender.com
-      - key: DB_DSN
-        value: "pgsql:host=aws-0-ap-northeast-2.pooler.supabase.com;port=5432;dbname=postgres;sslmode=require"
-      - key: DB_USER
-        value: postgres.nqnomapkknhcsgginruq
-      - key: DB_PASS
-        sync: false            # Supabase database password — enter it in the Render dashboard
+      - key: DATABASE_URL
+        sync: false            # paste the Supabase session-pooler URI (with password) in the Render dashboard
       - key: ZIINA_API_KEY
         sync: false
       - key: ZIINA_TEST
