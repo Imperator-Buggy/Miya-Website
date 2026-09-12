@@ -8,21 +8,25 @@ require __DIR__ . '/includes/header.php';
 
 <!-- ===================== HOME ===================== -->
 <section class="panel" data-panel="home" id="panel-home" role="tabpanel">
-  <div class="hero">
-    <div>
+  <div class="hero hero--scene">
+    <canvas class="pixel-scene hero__scene" data-scene="hero" aria-hidden="true"></canvas>
+    <div class="hero__copy">
       <p class="eyebrow">Home delivery &middot; baked to order</p>
       <h1>Warm cookies,<br>straight to your door.</h1>
       <p class="muted">Miya bakes every batch by hand in Abu Dhabi and drives it over while it's still soft in the middle. Nutella-filled, sea salt on top.</p>
       <div class="hero__cta">
         <a class="btn" href="#order">Order cookies &rarr;</a>
         <a class="btn btn--ghost" href="#menu">See the menu</a>
-        <a class="btn btn--kraft" href="game.php">&#9654; Play Cookie Farm</a>
+        <a class="btn btn--kraft" href="play.php">&#9654; Play</a>
       </div>
     </div>
     <div class="hero__art">
       <img class="hero__miya pixel" src="assets/img/sprites/miya_nutella_hero@4x.png" alt="Miya, the baker, holding up a Nutella cookie" width="128" height="128">
+      <span class="sparkle sparkle--1"></span><span class="sparkle sparkle--2"></span><span class="sparkle sparkle--3"></span>
     </div>
   </div>
+
+  <div class="scene-banner scene-banner--short"><canvas class="pixel-scene" data-scene="strip" aria-hidden="true"></canvas></div>
 
   <div class="grid grid--3">
     <div class="card cookie-card">
@@ -45,7 +49,7 @@ require __DIR__ . '/includes/header.php';
     </div>
   </div>
 
-  <div class="card card--kraft" style="margin-top:1.5rem">
+  <div class="card card--kraft card--wood" style="margin-top:1.5rem">
     <p class="eyebrow">How it works</p>
     <div class="grid steps">
       <div class="step"><img class="pixel" src="assets/img/props/cookie_tray@4x.png" alt=""><div><h3>Pick your box</h3><p class="muted">Choose cookies, pick a size, add a note.</p></div></div>

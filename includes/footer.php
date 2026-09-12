@@ -11,12 +11,14 @@
 </nav>
 <?php endif; ?>
 
+<div class="scene-banner scene-banner--footer"><canvas class="pixel-scene" data-scene="footer" data-time="night" aria-hidden="true"></canvas></div>
 <footer class="site-footer">
   <span class="brand__name">MIYA'S COOKIES</span>
-  <p><a href="<?= $base ?>index.php#about">About Miya</a> &middot; <a href="<?= $base ?>game.php">Play the game</a> &middot; <a href="<?= $base ?>cookie3d.php">The cookie in 3D</a></p>
+  <p><a href="<?= $base ?>index.php#about">About Miya</a> &middot; <a href="<?= $base ?>play.php">Play the games</a> &middot; <a href="<?= $base ?>cookie3d.php">The cookie in 3D</a></p>
   <p>&copy; <?= date('Y') ?> <?= e(SITE_NAME) ?> &middot; Abu Dhabi, UAE. <?= e(SITE_TAGLINE) ?></p>
 </footer>
 
+<script src="<?= $base ?>assets/js/scene.js?v=<?= e(ASSET_VERSION) ?>"></script>
 <script src="<?= $base ?>assets/js/music.js?v=<?= e(ASSET_VERSION) ?>"></script>
 <?php if (!$noIntro): ?><script src="<?= $base ?>assets/js/intro.js?v=<?= e(ASSET_VERSION) ?>"></script><?php endif; ?>
 <script src="<?= $base ?>assets/js/app.js?v=<?= e(ASSET_VERSION) ?>"></script>

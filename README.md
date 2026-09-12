@@ -22,7 +22,14 @@ PHP 8.2+ with `pdo_sqlite` (local) and `pdo_pgsql` (production). No Composer.
 ## Pages
 
 - **Home / Menu / Order** — the shop (index.php tab panels).
-- **Play** (`game.php`) — *Miya's Cookie Farm*, a pixel farming → baking → delivery
+- **Play** (`play.php`) — hub for both games.
+- **Cooking Miya** (`cooking.php`) — Cooking-Mama-style kitchen game. Eight recipes,
+  each a chain of gesture stages (tap on the beat, stir in circles, shake, swipe
+  sequences, drag scoops, hold-and-release fills and pours, tap at golden in the
+  oven, box with a bow). 0–100 per stage, 1–3 stars per recipe, stars unlock the
+  next recipe, and two stars on the first five unlock endless Rush Hour with lives
+  and a combo multiplier. Stage engine in `assets/js/cooking.js` (`STAGES`, `RECIPES`).
+- **Cookie Farm** (`game.php`) — *Miya's Cookie Farm*, a pixel farming → baking → delivery
   game built on the sprite pack. Grow wheat, milk cows, shake date palms, pick
   hazelnuts, scrape sea salt, bake in the oven timing mini-game, deliver before the
   order goes cold. Night orders pay double, hearts unlock the pack's outfits, coins

@@ -462,24 +462,54 @@
     hOrders.innerHTML = S.orders.map((o) => `<div class="order"><b>${o.who}</b> · ${o.qty} 🍪<div class="order__bar"><i style="width:${(o.left / o.total) * 100}%"></i></div></div>`).join('');
   }
 
+  const puffs = [];
+  function spawnPuff(x, y, color, life, vx, vy) { puffs.push({ x, y, color, life, max: life, vx, vy }); }
+  function drawPuffs(dt) { for (let i = puffs.length - 1; i >= 0; i--) { const p = puffs[i]; p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.life <= 0) { puffs.splice(i, 1); continue; } const r = Math.round((1 - p.life / p.max) * 2); disc(Math.round(p.x - cam.x), Math.round(p.y - cam.y), r, p.color); } }
+
   /* ---------- drawing the world ------------------------------------------ */
   function drawTile(t, x, y, tx, ty, time) {
     switch (t) {
-      case T.GRASS: rect(x, y, TILE, TILE, (tx + ty) % 2 ? GREEN.grass : GREEN.grass2); if (hash(tx * 31 + ty * 7) < 0.18) { px(x + 4, y + 9, GREEN.deep); px(x + 5, y + 8, GREEN.deep); px(x + 11, y + 5, GREEN.deep); } if (hash(tx * 13 + ty * 17) < 0.05) px(x + 8, y + 6, [PAL.R, PAL.p, PAL.G][ty % 3]); break;
+      case T.GRASS: {
+        rect(x, y, TILE, TILE, (tx + ty) % 2 ? GREEN.grass : GREEN.grass2);
+        const h1 = hash(tx * 31 + ty * 7);
+        if (h1 < 0.22) { px(x + 4, y + 9, GREEN.deep); px(x + 5, y + 8, GREEN.deep); px(x + 11, y + 5, GREEN.deep); px(x + 12, y + 4, GREEN.deep); }
+        else if (h1 < 0.30) { rect(x + 3, y + 10, 3, 1, GREEN.deep); rect(x + 9, y + 5, 3, 1, GREEN.deep); }
+        const h2 = hash(tx * 13 + ty * 17);
+        if (h2 < 0.06) { const c = [PAL.R, PAL.p, PAL.G, PAL.W][ty % 4]; px(x + 7, y + 6, c); px(x + 9, y + 6, c); px(x + 8, y + 5, c); px(x + 8, y + 7, c); px(x + 8, y + 6, PAL.G); px(x + 8, y + 9, GREEN.deep); }
+        else if (h2 < 0.09) { rect(x + 5, y + 10, 2, 2, PAL.W); rect(x + 5, y + 9, 2, 1, PAL.R); px(x + 5, y + 9, PAL.X); }
+        // soft edge where grass meets a path or sand
+        if (tileAt(tx, ty + 1) === T.PATH) for (let i = 0; i < TILE; i += 3) px(x + i + (ty % 3), y + 15, PAL.T);
+        if (tileAt(tx, ty - 1) === T.PATH) for (let i = 1; i < TILE; i += 4) px(x + i, y, PAL.T);
+        break;
+      }
       case T.PATH: rect(x, y, TILE, TILE, PAL.T); if (hash(tx * 5 + ty * 3) < 0.3) px(x + 3 + (tx % 7), y + 2 + (ty % 9), PAL.t); break;
       case T.SAND: rect(x, y, TILE, TILE, (tx + ty) % 2 ? GREEN.sand : GREEN.sand2); if (hash(tx * 9 + ty) < 0.1) px(x + 6, y + 10, PAL.w); break;
-      case T.WATER: { rect(x, y, TILE, TILE, GREEN.water); const wv = Math.floor(time * 2 + tx) % 4; if (ty === 31) rect(x, y, TILE, 2, PAL.W); if ((tx + ty) % 3 === wv % 3) rect(x + 3, y + 6 + (wv % 2), 6, 1, GREEN.water2); break; }
+      case T.WATER: { rect(x, y, TILE, TILE, GREEN.water); const wv = Math.floor(time * 2 + tx) % 4; if (ty === 31) { rect(x, y, TILE, 2, PAL.W); rect(x + ((tx * 5 + Math.floor(time * 3)) % 8), y + 2, 4, 1, PAL.W); } if ((tx + ty) % 3 === wv % 3) rect(x + 3, y + 6 + (wv % 2), 6, 1, GREEN.water2); if (hash(tx * 3 + ty * 11 + Math.floor(time)) < 0.04) px(x + 8, y + 9, PAL.X); break; }
       case T.SOIL: rect(x, y, TILE, TILE, GREEN.soil); rect(x, y + 3, TILE, 1, GREEN.soilWet); rect(x, y + 9, TILE, 1, GREEN.soilWet); break;
       case T.FLOOR: rect(x, y, TILE, TILE, PAL.t); if (hash(tx + ty * 3) < 0.3) px(x + 5, y + 7, PAL.e); break;
     }
   }
-  function drawTree(x, y) { rect(x + 7, y + 8, 2, 8, PAL.e); disc(x + 8, y + 4, 7, GREEN.deep); disc(x + 7, y + 2, 5, GREEN.light); px(x + 5, y, PAL.W); }
-  function drawPalm(x, y, ready) {
-    rect(x + 7, y - 2, 2, 18, PAL.d); px(x + 7, y + 4, PAL.e); px(x + 8, y + 9, PAL.e);
-    [[-7, -6], [7, -6], [-6, -1], [6, -1], [0, -9]].forEach(([dx, dy]) => { rect(x + 8 + Math.min(dx, 0), y - 3 + dy, Math.abs(dx) || 2, 2, GREEN.deep); rect(x + 8 + Math.min(dx, 0), y - 4 + dy, Math.abs(dx) || 2, 1, GREEN.light); });
-    if (ready) { px(x + 6, y - 2, PAL.C); px(x + 9, y - 1, PAL.C); px(x + 8, y - 3, PAL.d); }
+  function drawTree(x, y, time, seed) {
+    const sway = Math.round(Math.sin((time || 0) * 1.3 + (seed || 0)) * 1.2);
+    const blossom = ((seed || 0) % 3) === 1;
+    ellipse(x + 8, y + 16, 7, 2, 'rgba(43,33,28,0.18)');
+    rect(x + 7, y + 8, 2, 8, PAL.e); px(x + 7, y + 11, PAL.d);
+    disc(x + 8 + sway, y + 4, 7, blossom ? '#D98BA3' : GREEN.deep); disc(x + 7 + sway, y + 2, 5, blossom ? PAL.p : GREEN.light);
+    px(x + 5 + sway, y, PAL.W); if (blossom) { px(x + 11 + sway, y + 5, PAL.R); px(x + 3 + sway, y + 6, PAL.W); }
   }
-  function drawHazel(x, y, ready) { rect(x + 7, y + 9, 2, 7, PAL.e); disc(x + 8, y + 5, 7, GREEN.mid); disc(x + 7, y + 3, 5, GREEN.light); if (ready) { px(x + 4, y + 6, PAL.d); px(x + 10, y + 4, PAL.d); px(x + 8, y + 9, PAL.d); px(x + 12, y + 8, PAL.d); } }
+  function ellipse(cx, cy, rx, ry, c) { for (let y = -ry; y <= ry; y++) { const h = Math.floor(rx * Math.sqrt(1 - (y * y) / (ry * ry))); rect(cx - h, cy + y, h * 2 + 1, 1, c); } }
+  function drawShadow(x, y, w) { ellipse(Math.round(x), Math.round(y), w, 2, 'rgba(43,33,28,0.22)'); }
+  const PALM_CROWN = ['....LL.LL....', '..LLDDLDDLL..', '.LDD.DDD.DDL.', 'LD..DDDDD..DL', 'L..DD.D.DD..L', '..D..DDD..D..', '.....D.D.....'];
+  const GMAP = { D: GREEN.deep, L: GREEN.light, C: PAL.C };
+  function gridc(g, ox, oy, map) { for (let y = 0; y < g.length; y++) for (let x = 0; x < g[y].length; x++) { const ch = g[y][x]; if (ch !== '.') px(ox + x, oy + y, map[ch]); } }
+  function drawPalm(x, y, ready) {
+    ellipse(x + 8, y + 16, 6, 2, 'rgba(43,33,28,0.18)');
+    rect(x + 7, y - 1, 2, 17, PAL.d); px(x + 7, y + 3, PAL.e); px(x + 8, y + 7, PAL.e); px(x + 7, y + 11, PAL.e);
+    const sway = Math.round(Math.sin(smokeT * 1.1 + x * 0.05) * 1);
+    gridc(PALM_CROWN, x + 2 + sway, y - 6, GMAP);
+    if (ready) { px(x + 6 + sway, y + 1, PAL.C); px(x + 9 + sway, y + 1, PAL.C); px(x + 7 + sway, y + 2, PAL.d); px(x + 8 + sway, y + 2, PAL.C); }
+  }
+  function drawHazel(x, y, ready) { ellipse(x + 8, y + 16, 7, 2, 'rgba(43,33,28,0.18)'); rect(x + 7, y + 9, 2, 7, PAL.e); disc(x + 8, y + 5, 7, GREEN.mid); disc(x + 7, y + 3, 5, GREEN.light); if (ready) { px(x + 4, y + 6, PAL.d); px(x + 10, y + 4, PAL.d); px(x + 8, y + 9, PAL.d); px(x + 12, y + 8, PAL.d); } }
   function drawRock(x, y, ready) { disc(x + 8, y + 10, 5, PAL.k); disc(x + 7, y + 9, 4, PAL.w); if (ready) { px(x + 6, y + 7, PAL.X); px(x + 9, y + 8, PAL.X); px(x + 8, y + 10, PAL.X); } }
   function drawWell(x, y) { rect(x + 2, y + 6, 12, 8, PAL.t); rect(x + 2, y + 6, 12, 1, PAL.K); rect(x + 4, y + 8, 8, 3, PAL.B); rect(x + 3, y - 2, 1, 9, PAL.e); rect(x + 12, y - 2, 1, 9, PAL.e); rect(x + 1, y - 4, 14, 3, PAL.R); rect(x + 1, y - 4, 14, 1, PAL.K); }
   function drawMill(x, y, time) { rect(x + 8, y + 6, 16, 26, PAL.w); rect(x + 8, y + 6, 16, 1, PAL.K); rect(x + 6, y, 20, 7, PAL.e); rect(x + 14, y + 22, 5, 10, PAL.K); const a = time * 1.5; ctx.save(); ctx.translate(x + 16, y + 10); ctx.rotate(a); for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2); rect(-1, 0, 2, 14, PAL.K); rect(1, 3, 3, 10, PAL.W); } ctx.restore(); }
@@ -491,7 +521,11 @@
     rect(x + 20, y + 33, 8, 14, PAL.K); rect(x + 21, y + 34, 6, 13, PAL.e); px(x + 26, y + 41, PAL.G);
     rect(x + 6, y + 27, 8, 8, PAL.K); rect(x + 7, y + 28, 6, 6, isNight() ? PAL.G : PAL.B);
     rect(x + 34, y + 27, 8, 8, PAL.K); rect(x + 35, y + 28, 6, 6, isNight() ? PAL.G : PAL.B);
+    rect(x + 5, y + 35, 10, 2, PAL.e); px(x + 7, y + 34, PAL.R); px(x + 10, y + 34, PAL.p); px(x + 12, y + 34, PAL.G);
+    rect(x + 38, y + 4, 5, 10, PAL.k); rect(x + 37, y + 3, 7, 2, PAL.K);
+    for (let i = 0; i < 3; i++) { const u = (smokeT * 0.5 + i * 0.33 + (o.x % 5) * 0.1) % 1; disc(x + 40 + Math.round(Math.sin(u * 6 + i) * 2), y + 1 - Math.round(u * 14), 1 + Math.round(u * 2), `rgba(255,249,240,${0.8 - u * 0.75})`); }
   }
+  let smokeT = 0;
   function drawBakery(x, y, time) {
     rect(x, y + 28, 112, 52, PAL.T); rect(x, y + 28, 112, 1, PAL.K); rect(x, y + 79, 112, 1, PAL.k);
     for (let i = 0; i < 5; i++) rect(x - 3 + i * 3, y + 2 + i * 6, 118 - i * 6, 6, i % 2 ? PAL.R : PAL.K);
@@ -533,7 +567,7 @@
       const bottom = (o.y + (o.bh || 1)) * TILE + (o.kind === 'house' ? 32 : o.kind === 'bakery' ? 0 : 0);
       draws.push({ z: bottom + (o.kind === 'plot' ? -100 : 0), fn: () => {
         switch (o.kind) {
-          case 'tree': drawTree(x, y); break;
+          case 'tree': drawTree(x, y, time, o.x * 7 + o.y); break;
           case 'palm': drawPalm(x, y, nodeReady(o.id)); break;
           case 'hazel': drawHazel(x, y, nodeReady(o.id)); break;
           case 'rock': drawRock(x, y, nodeReady(o.id)); break;
@@ -545,7 +579,7 @@
           case 'bakery': drawBakery(x, y - 28, time); break;
           case 'bed': rect(x + 2, y + 4, 12, 8, PAL.B); rect(x + 2, y + 4, 4, 8, PAL.W); rect(x + 2, y + 3, 12, 1, PAL.K); break;
           case 'truck': if (!S.riding) drawTruck(x - 8, y - 8, false, time); break;
-          case 'npc': { const c = CAST[o.who]; chr(c.outfit, Math.floor(time * 1.4) % 2 ? 'idle' : (o.who === 'mama' ? 'tray' : o.who === 'noor' ? 'mix' : 'idle'), x - 8, y - 20, false); break; }
+          case 'npc': { const c = CAST[o.who]; drawShadow(x + 8, y + 17, 7); chr(c.outfit, Math.floor(time * 1.4) % 2 ? 'idle' : (o.who === 'mama' ? 'tray' : o.who === 'noor' ? 'mix' : 'idle'), x - 8, y - 20, false); break; }
         }
       } });
     }
@@ -553,10 +587,14 @@
     const pz = player.y;
     draws.push({ z: pz, fn: () => {
       const x = player.x - cam.x, y = player.y - cam.y;
+      drawShadow(x, y + 1, S.riding ? 18 : 7);
       if (S.riding) { drawTruck(x - 20, y - 26, player.moving, time); chr(S.outfit, 'idle', x - 20 + 4, y - 26 + 6 + 11 - 32 + 6 - 3, false); }
       else chr(S.outfit, player.moving ? (Math.floor(player.anim * 8) % 2 ? 'run' : 'idle') : (inv().cookies > 0 ? 'tray' : 'idle'), x - 16, y - 30, player.dir < 0);
     } });
     draws.sort((a, b) => a.z - b.z).forEach((d) => d.fn());
+    drawPuffs(1 / 60);
+    // butterflies by day, fireflies by night
+    for (let i = 0; i < 6; i++) { const bx = Math.round((hash(i) * MAP_W * TILE + Math.sin(time * 0.7 + i) * 30) - cam.x), by = Math.round((hash(i + 40) * MAP_H * TILE * 0.8 + Math.cos(time * 0.9 + i) * 12) - cam.y); if (bx < 0 || by < 0 || bx > W || by > H) continue; if (isNight()) { if (Math.sin(time * 3 + i) > 0) { px(bx, by, PAL.G); disc(bx, by, 2, 'rgba(243,201,76,0.25)'); } } else { const f = Math.floor(time * 8 + i) % 2; const c = [PAL.G, PAL.p, PAL.W][i % 3]; px(bx, by, c); px(bx + (f ? 1 : 2), by - 1, c); px(bx - (f ? 1 : 2), by - 1, c); } }
 
     // night tint + window glow
     if (isNight()) { const a = clamp((S.time - NIGHT_AT) / 120, 0, 1) * 0.45; rect(0, 0, W, H, `rgba(40,30,80,${a})`); }
@@ -582,6 +620,7 @@
         tryMove(dx * speed * dt, dy * speed * dt);
         if (Math.abs(dx) > 0.2) player.dir = dx > 0 ? 1 : -1;
         player.anim += dt;
+        if (Math.random() < (S.riding ? 0.5 : 0.18)) spawnPuff(player.x + (Math.random() - 0.5) * 6, player.y, S.riding ? PAL.T : 'rgba(216,174,126,0.8)', 0.4, -dx * 10, -6);
       }
       if (actionQueued) { interact(nearest()); }
       // clock
@@ -599,6 +638,7 @@
 
     cam.x = clamp(Math.round(player.x - W / 2), 0, MAP_W * TILE - W);
     cam.y = clamp(Math.round(player.y - H / 2), 0, MAP_H * TILE - H);
+    smokeT = time;
     drawWorld(time);
     hHint.textContent = dialogOpen || baking ? '' : hintFor(nearest());
     renderHUD();

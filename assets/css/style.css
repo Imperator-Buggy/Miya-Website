@@ -360,3 +360,60 @@ fieldset.field { border: 0; padding: 0; margin: 0 0 .9rem; }
 .c3d__slider input { flex: 1; accent-color: var(--ink); }
 .c3d__buttons { display: flex; flex-wrap: wrap; gap: .5rem; }
 .c3d__buttons [aria-pressed="true"] { background: var(--gold); }
+
+/* --------------------------------------------------------------------------
+   Living pixel scenes + fantasy dressing
+   -------------------------------------------------------------------------- */
+body { background-color: var(--cream); background-image: radial-gradient(var(--cream-shadow) 1px, transparent 1px), radial-gradient(#F3E6D0 1px, transparent 1px); background-size: 24px 24px, 24px 24px; background-position: 0 0, 12px 12px; }
+.pixel-scene { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+.scene-banner { border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow-pixel); overflow: hidden; background: var(--kraft-bg); }
+.scene-banner--short { height: 96px; margin: 1.5rem 0; }
+.panel > .scene-banner--short:first-child { margin-top: 0; }
+.scene-banner--footer { height: 150px; border-left: 0; border-right: 0; border-radius: 0; box-shadow: none; }
+.hero--scene { padding: 0; background: var(--ink); min-height: 340px; }
+.hero--scene::before { display: none; }
+.hero__scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero--scene .hero__copy { position: relative; margin: 1.25rem; padding: 1.25rem; background: rgba(255,249,240,.94); border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow-pixel); backdrop-filter: blur(2px); }
+.hero--scene .hero__art { position: relative; min-height: 220px; }
+.hero--scene .hero__miya { filter: drop-shadow(4px 6px 0 rgba(43,33,28,.35)); }
+@media (min-width: 760px) { .hero--scene { grid-template-columns: 1.1fr .9fr; padding: 0; } .hero--scene .hero__copy { margin: 2rem; } }
+.sparkle { position: absolute; width: 8px; height: 8px; background: var(--gold); box-shadow: 0 -8px 0 var(--gold), 0 8px 0 var(--gold), -8px 0 0 var(--gold), 8px 0 0 var(--gold); animation: sparkle 1.8s ease-in-out infinite; opacity: 0; pointer-events: none; }
+.sparkle--1 { left: 20%; top: 25%; } .sparkle--2 { right: 18%; top: 15%; animation-delay: .6s; } .sparkle--3 { right: 25%; bottom: 22%; animation-delay: 1.2s; }
+@keyframes sparkle { 0%, 100% { transform: scale(0); opacity: 0; } 50% { transform: scale(1); opacity: 1; } }
+.card--wood { background: var(--kraft); background-image: repeating-linear-gradient(0deg, transparent 0 14px, rgba(150,96,48,.12) 14px 16px); }
+.cookie-card img { transition: transform .25s var(--snap); }
+.cookie-card:hover img { transform: translateY(-4px) rotate(-6deg) scale(1.06); }
+.brand__sprite { animation: bob 3s ease-in-out infinite; }
+.tab.is-active img { animation: bob 1.6s ease-in-out infinite; }
+
+/* Play hub */
+.grid--2 { grid-template-columns: 1fr; }
+@media (min-width: 720px) { .grid--2 { grid-template-columns: 1fr 1fr; } }
+.play-card { display: flex; gap: 1rem; align-items: center; text-decoration: none; color: inherit; transition: transform .15s var(--snap), box-shadow .15s var(--snap); }
+.play-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.play-card img { width: 112px; height: 112px; flex: none; animation: bob 2.6s ease-in-out infinite; }
+.play-card .btn { margin-top: .5rem; }
+
+/* Cooking Miya */
+.cooking { position: relative; height: calc(100dvh - 66px); min-height: 480px; background: #F7E7CF; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+.cooking.is-night { background: #3A3168; }
+#ccanvas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); image-rendering: pixelated; image-rendering: crisp-edges; }
+.c-hud { position: absolute; inset: 0; pointer-events: none; }
+.c-hud > * { pointer-events: auto; }
+.c-hud__row { position: absolute; top: .5rem; left: .5rem; right: .5rem; display: flex; gap: .4rem; align-items: center; }
+.c-hud__row .hud__pill--link { margin-left: 0; }
+.c-hud__timer { position: absolute; top: 2.9rem; left: .5rem; right: .5rem; height: 10px; border: 2px solid var(--ink); border-radius: 999px; background: var(--cream-shadow); overflow: hidden; }
+.c-hud__timer i { display: block; height: 100%; background: var(--gold); transition: width .1s linear; }
+.c-hud__hint { bottom: .8rem; pointer-events: none; }
+.c-menu { position: absolute; inset: 0; overflow: auto; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; background: rgba(247,231,207,.85); }
+.cooking.is-night .c-menu { background: rgba(58,49,104,.9); }
+.recipe { display: flex; gap: .8rem; align-items: center; text-align: left; padding: .7rem .9rem; margin: 0; cursor: pointer; transition: transform .15s var(--snap); }
+.recipe:hover:not([disabled]) { transform: translate(-2px, -2px); }
+.recipe img { width: 48px; height: 48px; flex: none; }
+.recipe b { display: block; }
+.recipe small { display: block; color: var(--ink-soft); }
+.recipe .stars { color: var(--gold-shadow); font-size: 1rem; letter-spacing: .1em; }
+.recipe .stars .dim { color: var(--cream-shadow); }
+.recipe.is-locked { opacity: .6; cursor: not-allowed; }
+.c-result { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(360px, 92%); text-align: center; z-index: 6; }
+.c-result img { margin: 0 auto .5rem; }
